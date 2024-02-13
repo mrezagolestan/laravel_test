@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  laravel_test_mysql:
+    image: mysql:latest
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    volumes:
+      - ./docker/data/mysql:/var/lib/mysql
