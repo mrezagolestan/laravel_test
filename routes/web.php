@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::redirect('/','products');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::resource('products',\App\Http\Controllers\ProductController::class);
+
+require __DIR__.'/auth.php';
