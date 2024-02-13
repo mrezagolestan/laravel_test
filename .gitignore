@@ -18,3 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 docker/
+.phpunit.result.cache
+package-lock.json
