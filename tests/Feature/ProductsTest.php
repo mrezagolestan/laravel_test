@@ -33,4 +33,16 @@ class ProductsTest extends TestCase
             return $collection->contains($product);
         });
     }
+
+    public function test_product_table_doesnt_contain_11th_record(): void
+    {
+        $lastProduct = Product::factory(11)->create()->last();
+
+        $response = $this->get('/products');
+
+        $response->assertStatus(200);
+        $response->assertViewHas('products', function ($collection) use ($lastProduct){
+            return !$collection->contains($lastProduct);
+        });
+    }
 }
