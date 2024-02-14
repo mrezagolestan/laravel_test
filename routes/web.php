@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProductController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,10 +14,15 @@ use App\Http\Controllers\ProfileController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::redirect('/','products');
+Route::redirect('/', 'products');
 
-Route::resource('products',
-    \App\Http\Controllers\ProductController::class)->middleware('auth');
+Route::prefix('products')->name('products.')->middleware('auth')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('index');
+    Route::middleware('isAdmin')->group(function () {
+        Route::get('/create', [ProductController::class, 'create'])->name('create');
+        Route::get('/store', [ProductController::class, 'store'])->name('store');
+    });
+});
 
 
 Route::get('/dashboard', function () {
@@ -28,4 +35,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

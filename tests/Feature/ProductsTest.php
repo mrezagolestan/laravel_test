@@ -13,12 +13,15 @@ class ProductsTest extends TestCase
     use RefreshDatabase;
 
     private User $user;
+    private User $admin;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->user = $this->createUser();
+        $this->admin = $this->createUser(isAdmin: true);
+
     }
 
     public function test_product_table_empty(): void
@@ -56,8 +59,41 @@ class ProductsTest extends TestCase
         });
     }
 
-    public function createUser(): User
+    public function test_admin_can_see_create_button()
     {
-        return User::factory()->create();
+        $response = $this->actingAs($this->admin)->get('/products');
+
+        $response->assertStatus(200);
+        $response->assertSee('Add new Product');
     }
+
+    public function test_admin_can_see_create_page()
+    {
+        $response = $this->actingAs($this->admin)->get('/products/create');
+
+        $response->assertStatus(200);
+    }
+
+    public function test_user_can_not_see_create_button()
+    {
+        $response = $this->actingAs($this->user)->get('/products');
+
+        $response->assertStatus(200);
+        $response->assertDontSee('Add new Product');
+    }
+
+    public function test_user_can_not_see_create_page()
+    {
+        $response = $this->actingAs($this->user)->get('/products/create');
+
+        $response->assertStatus(403);
+    }
+
+    private function createUser($isAdmin = false): User
+    {
+        return User::factory()->create([
+            'is_admin' => $isAdmin,
+        ]);
+    }
+
 }

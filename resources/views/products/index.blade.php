@@ -1,4 +1,7 @@
 <h2>Products</h2>
+@if(auth()->user()->is_admin)
+    <a href="{{ route('products.create') }}">Add new Product</a>
+@endif
 <table>
     <thead>
     <tr>
