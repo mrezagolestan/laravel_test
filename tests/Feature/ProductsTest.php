@@ -21,7 +21,6 @@ class ProductsTest extends TestCase
 
         $this->user = $this->createUser();
         $this->admin = $this->createUser(isAdmin: true);
-
     }
 
     public function test_product_table_empty(): void
@@ -33,10 +32,7 @@ class ProductsTest extends TestCase
     }
     public function test_product_table_not_empty(): void
     {
-        $product = Product::create([
-            'name' => 'Product 1',
-            'price' => 123,
-        ]);
+        $product = Product::factory()->create();
 
         $response = $this->actingAs($this->user)->get('/products');
 
